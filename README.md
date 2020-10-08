@@ -6,9 +6,23 @@ Editor latency is delay between an input event and a corresponding screen update
 
 Check my article [Typing with pleasure](https://pavelfatin.com/typing-with-pleasure) to learn more about editor latency and its effects on typing performance.
 
-Download: [typometer-1.0.1-bin.zip](https://github.com/pavelfatin/typometer/releases/download/v1.0.1/typometer-1.0.1-bin.zip) (0.5 MB)
+## Download
 
-Java 8 or latter is required to run the program. You can [download Java](https://java.com/download) from the official site.
+Check the releases section.
+
+Java 8 or later is required to run the program. You can [download Java](https://java.com/download) from the official site.
+
+## Build
+
+You will need a [JDK](https://www.oracle.com/java/technologies/javase-jdk15-downloads.html) and [Maven](http://maven.apache.org). Once you have them set up, you're ready to build Typometer.
+
+Open your terminal of choice, and set your working directory to this project's root (where `pom.xml` is located). Then, build with Maven:
+
+```
+mvn clean pacakge
+```
+
+If the compilation is successful, you will get a `target` directory, with the executable `typometer-<version>.jar` available inside.
 
 ## Features
 
