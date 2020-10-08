@@ -34,7 +34,7 @@ Frequency distribution chart:
 
 The program generates OS input events (key presses) and uses screen capture to fully automate the test process.
 
-At first, a predefined pattern ("``.....``") is inserted in editor window in order to detect screen metrics (start position, step, background, etc.).
+At first, a predefined pattern (a series of "``.``" characters) is inserted in editor window in order to detect screen metrics (start position, step, background, etc.).
 
 After that, the program types a predefined number of "``.``" characters into the editor (with given periodicity), measuring delays between key presses and corresponding character drawings.
 

@@ -37,8 +37,8 @@ import static java.lang.Math.round;
 import static java.lang.Thread.sleep;
 
 class BenchmarkImpl implements Benchmark {
-    private static final int PATTERN_LENGTH = 5;
-    private static final int MIN_LINE_LENGTH = 15;
+    private static final int PATTERN_LENGTH = 25;
+    private static final int MIN_LINE_LENGTH = 25;
 
     private static final int PATTERN_INSERTION_DELAY = 300;
     private static final int DELETION_DELAY = 200;
