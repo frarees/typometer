@@ -134,13 +134,13 @@ public class MainFrame extends JFrame {
         initParameterBounds();
 
         myNative.setEnabled(ScreenAccessor.isNativeApiSupported());
-        onReset();
 
         myButtonGroup.add(mySeriesButton);
         myButtonGroup.add(myDistributionButton);
 
         updateActionStates(Collections.emptyList());
         initListeners();
+        onReset();
 
         getContentPane().add(myComponent);
         getRootPane().setDefaultButton(myBenchmarkButton);
@@ -195,6 +195,8 @@ public class MainFrame extends JFrame {
         myCount.setValue(myDefaultParameters.getCount());
         myDelay.setValue(myDefaultParameters.getDelay());
         myPausesEnabled.setSelected(myDefaultParameters.isPausesEnabled());
+        myPausePeriod.setEnabled(myDefaultParameters.isPausesEnabled());
+        myPauseLength.setEnabled(myDefaultParameters.isPausesEnabled());
         myPausePeriod.setValue(myDefaultParameters.getPausePeriod());
         myPauseLength.setValue(myDefaultParameters.getPauseLength());
 
@@ -221,6 +223,15 @@ public class MainFrame extends JFrame {
             @Override
             public void windowClosed(WindowEvent e) {
                 onWindowClosed();
+            }
+        });
+
+        myPausesEnabled.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                boolean selected = e.getStateChange() == ItemEvent.SELECTED;
+                myPausePeriod.setEnabled(selected);
+                myPauseLength.setEnabled(selected);
             }
         });
     }
