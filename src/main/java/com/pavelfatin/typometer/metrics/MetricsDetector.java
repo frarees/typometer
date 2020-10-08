@@ -95,14 +95,16 @@ class MetricsDetector {
 
         double x1 = first.x + 0.5D * first.width - 1;
         double x2 = last.x + 0.5D * last.width - 1;
+        double y1 = first.y + 0.5D * first.height - 1;
+        double y2 = last.y + 0.5D * last.height - 1;
 
         double step = (x2 - x1) / (rectangles.size() - 1);
 
-        Point point = new Point((int) round(x1), first.y);
+        Point point = new Point((int) round(x1), (int) round(y1));
 
-        int background = image2.getRGB((int) round(last.x + step * 2), last.y);
+        int background = image2.getRGB((int) round(x2 + step * 2), (int) round(y2));
 
-        boolean blockCursor = image2.getRGB((int) round(last.x + step), last.y) != background;
+        boolean blockCursor = image2.getRGB((int) round(x2 + step), (int) round(y2)) != background;
 
         int availableLength = uniformLengthFrom(image2, new Point(point.x + (int) round(step * offset), point.y), background);
 
