@@ -1,10 +1,10 @@
-# Typometer README
+# Typometer
 
 Typometer is a tool to measure and analyze visual latency of text / code editors.
 
 Editor latency is delay between an input event and a corresponding screen update, in particular case – delay between keystroke and character appearance. While there are many kinds of delays (caret movement, line editing, etc.), typing latency is a major predictor of editor usability.
 
-Check my article [Typing with pleasure](https://pavelfatin.com/typing-with-pleasure) to learn more about editor latency and its effects on typing performance.
+Check [Typing with pleasure](https://pavelfatin.com/typing-with-pleasure) to learn more about editor latency and its effects on typing performance.
 
 ## Download
 
@@ -91,9 +91,9 @@ After test result is acquired, you may either analyze the singular data by itsel
 
 Both source- and aggregate data is easily accessible, you can:
 
-* copy table content  as text,
-* save chart to [PNG](https://en.wikipedia.org/wiki/Portable_Network_Graphics) file (with legend and summary stats),
-* export raw data in [CSV](https://en.wikipedia.org/wiki/Comma-separated_values) format (for [Calc](https://en.wikipedia.org/wiki/LibreOffice_Calc) or [R](https://www.r-project.org/), if you fancy).
+* Copy table content as text.
+* Save chart to [PNG](https://en.wikipedia.org/wiki/Portable_Network_Graphics) file (with legend and summary stats).
+* Export raw data in [CSV](https://en.wikipedia.org/wiki/Comma-separated_values) format (for [Calc](https://en.wikipedia.org/wiki/LibreOffice_Calc) or [R](https://www.r-project.org/), if you fancy).
 
 It's possible to merge results either by inserting data from an existing CSV file, or by appending data to a CSV file on saving.
 
@@ -113,11 +113,11 @@ If you're implementing a text / code editor, take a look at the [programming tec
 
 To make benchmarking possible, correct screen metrics must be detected at the initial step. The program attempts to recognize a custom pattern (5 new dots) in order to determine the following parameters:
 
-* starting position,
-* horizontal step,
-* background color,
-* line length,
-* caret type.
+* Starting position.
+* Horizontal step.
+* Background color.
+* Line length.
+* Caret type.
 
 Because there are many editors (and multiple versions of each editor), which looks different on different platforms, and there are many possible color schemes and fonts, the metrics recognition algorithm has to be very flexible. While the program sources contain a great deal of test cases, some glitches are still probable.
 
