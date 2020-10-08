@@ -56,9 +56,14 @@ import static java.util.stream.Collectors.toList;
 
 public class MainFrame extends JFrame {
     private static final Collection<Color> PALETTE_COLORS = asList(
-            brighter(UIManager.getColor("textHighlight")),
-            brighter(new Color(105, 138, 57)),
-            brighter(new Color(138, 57, 105)));
+        new Color(55,126,184),
+        new Color(228,26,28),
+        new Color(77,175,74),
+        new Color(152,78,163),
+        new Color(255,127,0),
+        new Color(196,206,0),
+        new Color(166,86,40),
+        new Color(247,129,191));
 
     private static final Color DEFAULT_COLOR = Color.GRAY;
 
@@ -185,7 +190,7 @@ public class MainFrame extends JFrame {
         myCount.setModel(new SpinnerNumberModel(100, 30, 9990, 10));
         myDelay.setModel(new SpinnerNumberModel(0, 0, 9990, 10));
         myPausesEnabled.setSelected(false);
-        myPausePeriod.setModel(new SpinnerNumberModel(10, 10, 9900, 10));
+        myPausePeriod.setModel(new SpinnerNumberModel(10, 10, 9990, 10));
         myPauseLength.setModel(new SpinnerNumberModel(0, 0, 9900, 100));
     }
 
