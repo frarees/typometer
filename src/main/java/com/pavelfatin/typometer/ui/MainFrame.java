@@ -182,7 +182,7 @@ public class MainFrame extends JFrame {
     }
 
     private void initParameterBounds() {
-        myCount.setModel(new SpinnerNumberModel(100, 100, 9900, 100));
+        myCount.setModel(new SpinnerNumberModel(100, 30, 9990, 10));
         myDelay.setModel(new SpinnerNumberModel(0, 0, 9990, 10));
         myPausesEnabled.setSelected(false);
         myPausePeriod.setModel(new SpinnerNumberModel(10, 10, 9900, 10));
