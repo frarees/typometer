@@ -1,25 +1,25 @@
 # Typometer
 
-Typometer is a tool to measure and analyze visual latency of text / code editors.
+Typometer is a tool to measure and analyze the visual latency of text editors.
 
-Editor latency is delay between an input event and a corresponding screen update, in particular case – delay between keystroke and character appearance. While there are many kinds of delays (caret movement, line editing, etc.), typing latency is a major predictor of editor usability.
+Editor latency is the delay between an input event and a corresponding screen update — in particular, the delay between keystroke and character appearance. While there are many kinds of delays (caret movement, line editing, etc.), typing latency is a major predictor of editor usability.
 
-Check [Typing with pleasure](https://pavelfatin.com/typing-with-pleasure) to learn more about editor latency and its effects on typing performance.
+Check the article [typing with pleasure](https://pavelfatin.com/typing-with-pleasure) to learn more about editor latency and its effects on typing performance.
 
 ## Download
 
 Check the releases section.
 
-Java 8 or later is required to run the program. You can [download Java](https://java.com/download) from the official site.
+Java 8 or later is required to run the program. You can download [Java](https://java.com/download) from the official site.
 
 ## Build
 
-You will need a [JDK](https://www.oracle.com/java/technologies/javase-jdk15-downloads.html) and [Maven](http://maven.apache.org). Once you have them set up, you're ready to build Typometer.
+You will need a [JDK](https://jdk.java.net) and [Maven](http://maven.apache.org). Once you have them set up, you're ready to build Typometer.
 
 Open your terminal of choice, and set your working directory to this project's root (where `pom.xml` is located). Then, build with Maven:
 
 ```
-mvn clean pacakge
+mvn clean package
 ```
 
 If the compilation is successful, you will get a `target` directory, with the executable `typometer-<version>.jar` available inside.
@@ -28,11 +28,11 @@ If the compilation is successful, you will get a `target` directory, with the ex
 
 * Cross-platform (Windows, Mac, Linux).
 * Native API calls for faster screen access.
-* Synchronous / asynchronous modes.
-* Import / export of CSV data.
+* Synchronous and asynchronous modes.
+* Import and export of CSV data.
 * Summary statistics, frequency distribution.
-* Line / bar charts (including comparative ones).
-* Chart image export (with legend).
+* Line and bar charts (including comparative ones).
+* Chart image export (with legends).
 
 ## Screenshots
 
@@ -48,70 +48,70 @@ Frequency distribution chart:
 
 The program generates OS input events (key presses) and uses screen capture to fully automate the test process.
 
-At first, a predefined pattern (a series of "``.``" characters) is inserted in editor window in order to detect screen metrics (start position, step, background, etc.).
+At first, a predefined pattern (a series of "``.``" characters) is inserted in the editor window in order to detect screen metrics (start position, step, background, etc.).
 
 After that, the program types a predefined number of "``.``" characters into the editor (with given periodicity), measuring delays between key presses and corresponding character drawings.
 
-To achieve high accuracy of measurement, only a single pixel is queried for each symbol. Moreover, the program can use fast native API ([WinAPI](https://en.wikipedia.org/wiki/Windows_API), [XLib](https://en.wikipedia.org/wiki/Xlib)) and [Cocoa](https://en.wikipedia.org/wiki/Cocoa_(API)) calls on supported platforms, offering [AWT robot](http://docs.oracle.com/javase/8/docs/api/java/awt/Robot.html) as a fallback option.
+To achieve high accuracy of measurement, only a single pixel is queried for each symbol. Moreover, the program can use fast native API ([WinAPI](https://en.wikipedia.org/wiki/Windows_API), [XLib](https://en.wikipedia.org/wiki/Xlib), and [Cocoa](https://en.wikipedia.org/wiki/Cocoa_%28API%29)) calls on supported platforms, offering [AWT robot](http://docs.oracle.com/javase/8/docs/api/java/awt/Robot.html) as a fallback option.
 
 There are two modes of testing available:
 
-* **Synchronous** – the program always waits for typed character to appear before making a pause and typing the next character. It's the most accurate method (because there's no threading overhead).
-* **Asynchronous** – the program types and recognizes characters independently. This method is slightly less accurate, but it's useful for testing rapid typing, when editor drawing might easily lag by multiple characters.
+* **Synchronous** – the program always waits for a typed character to appear before making a pause and typing the next character. It's the most accurate method (because there's no threading overhead).
+* **Asynchronous** – the program types and recognizes characters independently. This method is slightly less accurate, but it's useful for testing rapid typing when editor drawing might easily lag by multiple characters.
 
 ## Usage
 
-To register only essential editor latency, text must be rendered directly to [framebuffer](https://en.wikipedia.org/wiki/Framebuffer), without intermediate image processing that might introduce additional delay. Prefer [stacking window managers](https://en.wikipedia.org/wiki/Stacking_window_manager) to [compositing window managers](https://en.wikipedia.org/wiki/Compositing_window_manager) for the testing purposes, particularly:
+To register only essential editor latency, the text must be rendered directly to the [framebuffer](https://en.wikipedia.org/wiki/Framebuffer), without intermediate image processing that might introduce additional delay. Prefer [stacking window managers](https://en.wikipedia.org/wiki/Stacking_window_manager) to [compositing window managers](https://en.wikipedia.org/wiki/Compositing_window_manager) for the testing purposes, particularly:
 
-* Switch to Classic theme in Windows. [Windows Aero](https://en.wikipedia.org/wiki/Windows_Aero) enforces internal [vertical synchronization](https://en.wikipedia.org/wiki/Analog_television#Vertical_synchronization), which leads to minimum 1 frame lag (about 17 ms for 60 Hz monitor refresh rate) and delay discretization. It's also possible to disable the compositing directly [in Windows 7](https://web.archive.org/web/20161021060058/http://www.softwareaudioconsole.com/Tweaking_Windows_7.htm) and [in Windows 8](http://www.rlauncher.com/wiki/index.php?title=Input_Lag_Checklist#Disable_Desktop_Composition_in_Windows_8_and_8.1).
-* Use Linux distributive with lightweight [window manager](https://en.wikipedia.org/wiki/Window_manager), like [Lubuntu](http://lubuntu.net/) ([Openbox](https://en.wikipedia.org/wiki/Openbox)). Complex, 3D-based windows managers might substantially increase system rendering latency, for example, on my hardware, Ubuntu's [Compiz](https://en.wikipedia.org/wiki/Compiz), adds ~10 ms unavoidable lag.
+* Switch to Classic theme in Windows. [Windows Aero](https://en.wikipedia.org/wiki/Windows_Aero) enforces internal [vertical synchronization](https://en.wikipedia.org/wiki/Analog_television#Vertical_synchronization), which leads to a minimum of 1 frame lag (about 17 ms for 60 Hz monitor refresh rate) and to delay discretization. It's also possible to disable the compositing directly [in Windows 7](https://web.archive.org/web/20161021060058/http://www.softwareaudioconsole.com/Tweaking_Windows_7.htm) and [in Windows 8](http://www.rlauncher.com/wiki/index.php?title=Input_Lag_Checklist#Disable_Desktop_Composition_in_Windows_8_and_8.1).
+* Use a Linux distribution with a lightweight [window manager](https://en.wikipedia.org/wiki/Window_manager), like [Lubuntu](http://lubuntu.net/) ([Openbox](https://en.wikipedia.org/wiki/Openbox)). Complex, 3D-based windows managers might substantially increase system rendering latency, for example, on my hardware, Ubuntu's [Compiz](https://en.wikipedia.org/wiki/Compiz), adds ~10 ms unavoidable lag.
 
 Close all programs that add system-wide keyboard [hooks](https://en.wikipedia.org/wiki/Hooking), as they might process the keyboard events synchronously and affect the results (for example, [Workrave](http://www.workrave.org/) is known to noticeable increase the typing latency).
 
-You may consider switching your machine in a particular hardware mode (power scheme, integrated / discrete graphics, etc.). In power save mode (and on battery), for example, editor responsiveness is usually much lower, so it's possible to detect significant performance glitches which are less frequently observable otherwise.
+You may consider switching your machine in a particular hardware mode (power scheme, integrated/discrete graphics, etc.). In power save mode (and on battery), for example, editor responsiveness is usually much lower, so it's possible to detect significant performance glitches that are less frequently observable otherwise.
 
-Before you start benchmarking, make sure that other applications are not placing noticeable load on your system. It's up to you whether to "warm up" [VM](https://en.wikipedia.org/wiki/Virtual_machine#Process_virtual_machines)-based editors, so they can pre-compile performance-critical parts of their code before proceeding.
+Before you start benchmarking, make sure that other applications are not placing a noticeable load on your system. It's up to you whether to warm-up [VM](https://en.wikipedia.org/wiki/Virtual_machine#Process_virtual_machines)-based editors, so they can pre-compile performance-critical parts of their code before proceeding.
 
-If possible, enable non-block caret (i. e. underline / vertical bar instead of rectangle) in editor. This might increase measurement accuracy.
+If possible, enable non-block caret (i.e. underline or vertical bar instead of a rectangle) in the editor. This might increase measurement accuracy.
 
-Typical action sequence is the following:
+A typical action sequence:
 
 1. Specify a measurement title, like "HTML in Vim" *(optional, can be set later)*.
 2. Configure test parameters *(optional)*.
 3. Launch an editor, maximize its window.
 4. Open some data in the editor, for instance, a large HTML file *(optional)*.
-5. Place editor caret in desired context (like comment, etc.), at the end of short / empty line.
+5. Place editor caret in the desired context (e.g. a comment), at the end of a short or empty line.
 6. Start benchmarking process in the program.
 7. After a corresponding prompt, transfer focus to the editor window.
 8. Wait for test completion, don't interfere with the process.
 
-You can always interrupt the testing process simply by transferring focus back to the program window.
+You can always interrupt the testing process simply by transferring the focus back to the program window.
 
-After test result is acquired, you may either analyze the singular data by itself or perform additional tests (different editors / conditions) to do comparative analysis.
+After the test result is acquired, you may either analyze the singular data by itself or perform additional tests (different editors and conditions) to do a comparative analysis.
 
-Both source- and aggregate data is easily accessible, you can:
+Both source and aggregate data are easily accessible. You can:
 
-* Copy table content as text.
-* Save chart to [PNG](https://en.wikipedia.org/wiki/Portable_Network_Graphics) file (with legend and summary stats).
+* Copy the table content as text.
+* Save the chart to [PNG](https://en.wikipedia.org/wiki/Portable_Network_Graphics) file (with legend and summary stats).
 * Export raw data in [CSV](https://en.wikipedia.org/wiki/Comma-separated_values) format (for [Calc](https://en.wikipedia.org/wiki/LibreOffice_Calc) or [R](https://www.r-project.org/), if you fancy).
 
-It's possible to merge results either by inserting data from an existing CSV file, or by appending data to a CSV file on saving.
+It's possible to merge the results either by inserting data from an existing CSV file or by appending data to a CSV file on saving.
 
 ## Recipes
 
-Here are a few tips on how you can use the tool to detect performance bottlenecks in text / code editors:
+Here are a few tips on how you can use the tool to detect performance bottlenecks in text editors:
 
-* Check whether number of lines influences the latency. If so, typing might "lag" inside a large file.
+* Check whether the number of lines influences the latency. If so, typing might "lag" inside a large file.
 * Check whether editor window size influences the latency. If so, the editor probably does excessive repainting instead of drawing only a newly inserted symbol.
-* Check whether latency depends on horizontal symbol position. Ideally, that correlation should be undetectable.
-* Try to enable highlighting / autocomplete / folding / spellchecker / etc. Those features should be processed asynchronously, without affecting the typing as such.
+* Check whether latency depends on the horizontal symbol position. Ideally, that correlation should be undetectable.
+* Try to enable highlighting, autocomplete, folding, spellchecker, etc. Those features should be processed asynchronously, without affecting the typing as such.
 * Try to run the test in power-saving mode. Ideally, typing should be handled decently even on less powerful hardware.
 
-If you're implementing a text / code editor, take a look at the [programming techniques](https://pavelfatin.com/low-latency-painting-in-awt-and-swing/) to significantly reduce the drawing latency.
+If you're implementing a text editor, take a look at the [programming techniques](https://pavelfatin.com/low-latency-painting-in-awt-and-swing) to significantly reduce the drawing latency.
 
 ## Troubleshooting
 
-To make benchmarking possible, correct screen metrics must be detected at the initial step. The program attempts to recognize a custom pattern (5 new dots) in order to determine the following parameters:
+To make benchmarking possible, correct screen metrics must be detected at the initial step. The program attempts to recognize a custom pattern (5 new dots) to determine the following parameters:
 
 * Starting position.
 * Horizontal step.
@@ -119,17 +119,17 @@ To make benchmarking possible, correct screen metrics must be detected at the in
 * Line length.
 * Caret type.
 
-Because there are many editors (and multiple versions of each editor), which looks different on different platforms, and there are many possible color schemes and fonts, the metrics recognition algorithm has to be very flexible. While the program sources contain a great deal of test cases, some glitches are still probable.
+Because there are many editors (and multiple versions of each editor), which look different on different platforms, and there are many possible color schemes and fonts, the metrics recognition algorithm has to be very flexible. While the program sources contain many test cases, some glitches are still probable.
 
 Here's a list of typical problems and corresponding solutions:
 
 * Editor background is non-uniform (gradient, picture) – set solid color background.
 * Characters are too low-contrast and obscure – use a crisp color scheme.
 * Dot characters merge with the caret – increase font size.
-* Editor replaces multiple dots with ellipsis – disable that auto-correction.
-* Spaces between dots are uneven – use [monospaced font](https://en.wikipedia.org/wiki/Monospaced_font) in the editor.
-* Editor has a left panel that melds with the text area – hide the panel.
+* The editor replaces multiple dots with an ellipsis – disable that auto-correction.
+* Spaces between dots are uneven – use [monospaced fonts](https://en.wikipedia.org/wiki/Monospaced_font) in the editor.
+* The editor has a left panel that melds with the text area – hide the panel.
 
-Feel free to contribute by creating additional test case images (check `/src/test/resources` directory for examples).
+Feel free to contribute by creating additional test case images (check `src/test/resources`).
 
-Pavel Fatin, [https://pavelfatin.com](https://pavelfatin.com/)
+Pavel Fatin, [https://pavelfatin.com](https://pavelfatin.com)
