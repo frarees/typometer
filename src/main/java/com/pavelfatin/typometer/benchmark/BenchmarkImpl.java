@@ -18,6 +18,7 @@ package com.pavelfatin.typometer.benchmark;
 
 import com.pavelfatin.typometer.ExceptionHandler;
 import com.pavelfatin.typometer.metrics.Metrics;
+import com.pavelfatin.typometer.metrics.ColorUtil;
 import com.pavelfatin.typometer.screen.ScreenAccessor;
 
 import java.awt.*;
@@ -176,7 +177,8 @@ class BenchmarkImpl implements Benchmark {
         int y = point.y;
 
         for (int delay : delays) {
-            if (!accessor.getPixelColor((int) round(x), y).equals(metrics.getBackground())) {
+            if (!ColorUtil.equals(metrics.getBackground(), accessor.getPixelColor((int)round(x), y)))
+            {
                 throw new BenchmarkException("Previously undetected block cursor found.");
             }
 

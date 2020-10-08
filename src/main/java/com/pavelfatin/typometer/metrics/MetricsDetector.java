@@ -102,24 +102,26 @@ class MetricsDetector {
 
         Point point = new Point((int) round(x1), (int) round(y1));
 
-        int background = image2.getRGB((int) round(x2 + step * 2), (int) round(y2));
+        Color background = new Color(image2.getRGB((int) round(x2 + step * 2), (int) round(y2)));
 
-        boolean blockCursor = image2.getRGB((int) round(x2 + step), (int) round(y2)) != background;
+        boolean blockCursor = !ColorUtil.equals(new Color(image2.getRGB((int) round(x2 + step), (int) round(y2))), background);
 
         int availableLength = uniformLengthFrom(image2, new Point(point.x + (int) round(step * offset), point.y), background);
 
         int length = (int) (floor(availableLength / step)) - (blockCursor ? 1 : 0);
 
-        return new Metrics(point, step, length + offset - 1, new Color(background), blockCursor);
+        return new Metrics(point, step, length + offset - 1, background, blockCursor);
     }
 
-    private static int uniformLengthFrom(BufferedImage image, Point point, int color) {
+    private static int uniformLengthFrom(BufferedImage image, Point point, Color color) {
         int width = image.getWidth();
 
         int x;
 
         for (x = point.x; x < width; x++) {
-            if (image.getRGB(x, point.y) != color) break;
+            if (!ColorUtil.equals(new Color(image.getRGB(x, point.y)), color)) {
+                break;
+            }
         }
 
         return x - point.x;

@@ -146,14 +146,14 @@ public class MetricsTest {
         for (int i = begin; i < end; i++) {
             int ix = (int) round(x);
 
-            Color color = new Color(image.getRGB(ix, p.y));
+            boolean present = ColorUtil.equals(metrics.getBackground(), new Color(image.getRGB(ix, p.y)));
 
             if (expectation) {
                 String message = String.format("Point %d must be present at (%d, %d)", i + 1, ix, p.y);
-                Assert.assertNotEquals(message, metrics.getBackground(), color);
+                Assert.assertFalse(message, present);
             } else {
                 String message = String.format("Point %d must not be present at (%d, %d)", i + 1, ix, p.y);
-                Assert.assertEquals(message, metrics.getBackground(), color);
+                Assert.assertTrue(message, present);
             }
 
             x += metrics.getStep();

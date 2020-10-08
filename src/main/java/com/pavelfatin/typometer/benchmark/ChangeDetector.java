@@ -17,6 +17,7 @@
 package com.pavelfatin.typometer.benchmark;
 
 import com.pavelfatin.typometer.screen.ScreenAccessor;
+import com.pavelfatin.typometer.metrics.ColorUtil;
 
 import java.awt.*;
 
@@ -29,8 +30,7 @@ class ChangeDetector {
 
         do {
             for (int i = 0; i < CHECK_PERIOD; i++) {
-                Color color = accessor.getPixelColor(x, y);
-                if (!previousColor.equals(color)) {
+                if (!ColorUtil.equals(accessor.getPixelColor(x, y), previousColor)) {
                     return;
                 }
             }
