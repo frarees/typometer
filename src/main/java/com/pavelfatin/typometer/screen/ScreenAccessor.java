@@ -26,7 +26,7 @@ public interface ScreenAccessor {
     void dispose();
 
     static boolean isNativeApiSupported() {
-        return Platform.isWindows() || Platform.isLinux();
+        return Platform.isWindows() || Platform.isLinux() || Platform.isMac();
     }
 
     static ScreenAccessor create(boolean isNative) {
@@ -36,6 +36,9 @@ public interface ScreenAccessor {
             }
             if (Platform.isLinux()) {
                 return new LinuxScreenAccessor();
+            }
+            if (Platform.isMac()) {
+                return new MacosScreenAccessor();
             }
         }
         return new AwtRobotScreenAccessor();

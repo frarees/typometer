@@ -62,6 +62,7 @@
                                 <include>com/sun/jna/win32/*</include>
                                 <include>com/sun/jna/win32-x86/*</include>
                                 <include>com/sun/jna/win32-x86-64/*</include>
+                                <include>com/sun/jna/darwin/*</include>
                             </includes>
                         </filter>
                     </filters>
