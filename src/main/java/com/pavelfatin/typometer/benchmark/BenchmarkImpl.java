@@ -159,8 +159,7 @@ class BenchmarkImpl implements Benchmark {
     private static void delete(Robot robot, ScreenAccessor accessor, Point point, int count)
             throws BenchmarkException, InterruptedException {
 
-        Color previousColor = robot.getPixelColor(point.x, point.y);
-
+        Color previousColor = accessor.getPixelColor(point.x, point.y);
         type(robot, KeyEvent.VK_BACK_SPACE, count);
         waitForChange(accessor, point.x, point.y, previousColor);
 
