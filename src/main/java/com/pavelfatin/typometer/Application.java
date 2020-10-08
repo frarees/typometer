@@ -27,6 +27,9 @@ public class Application {
     private static final Parameters DEFAULT_PARAMETERS = new Parameters(200, 150, false, 50, 1000);
 
     public static void main(String[] args) throws Exception {
+        System.setProperty("apple.awt.application.appearance", "system");
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+
         Thread.setDefaultUncaughtExceptionHandler(ExceptionHandler.INSTANCE);
         SwingUtilities.invokeLater(() -> openMainForm(DEFAULT_TITLE, DEFAULT_PARAMETERS));
     }
