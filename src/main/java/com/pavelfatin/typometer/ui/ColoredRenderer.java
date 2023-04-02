@@ -20,6 +20,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.lang.reflect.Field;
+import java.lang.reflect.InaccessibleObjectException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -35,6 +36,8 @@ class ColoredRenderer extends DefaultTableCellRenderer {
             Field field = Component.class.getDeclaredField("background");
             field.setAccessible(true);
             return Optional.of(field);
+        } catch (InaccessibleObjectException e) {
+            return Optional.empty();
         } catch (NoSuchFieldException e) {
             return Optional.empty();
         }
