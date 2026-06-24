@@ -6,24 +6,71 @@ Editor latency is the delay between an input event and a corresponding screen up
 
 Check the article [typing with pleasure](https://pavelfatin.com/typing-with-pleasure) to learn more about editor latency and its effects on typing performance.
 
+> This is a fork of the original [Typometer](https://github.com/pavelfatin/typometer)
+> by [Pavel Fatin](https://pavelfatin.com), maintained by Francisco Requena.
+> See [`NOTICE`](NOTICE) for attribution.
+
+<!-- exclude:start -->
 ## Download
 
-Check the releases section.
+Download the package for your platform from the
+[releases section](https://github.com/frarees/typometer/releases):
 
-Java 8 or later is required to run the program. You can download [Java](https://java.com/download) from the official site.
+* `typometer-<version>-macos-arm64.dmg` – Apple Silicon Macs.
+* `typometer-<version>-macos-x64.dmg` – Intel Macs.
+* `typometer-<version>-windows-x64.msi` – 64-bit Windows.
+* `typometer-<version>-linux-x64.tar.gz` – 64-bit Linux.
+* `typometer-<version>-bin.zip` – portable Java fallback with documentation
+  and license.
+
+The native packages include a Java runtime. Java 16 or later is required only
+when running the JAR contained in the portable ZIP.
+
+### Installing unsigned packages
+
+Release packages are not code-signed. Verify the downloaded file against
+`SHA256SUMS` from the same GitHub Release before bypassing operating-system
+warnings.
+
+On macOS, open the downloaded DMG and drag `Typometer.app` into
+`/Applications`. Then remove the quarantine attribute:
+
+```bash
+xattr -dr com.apple.quarantine /Applications/Typometer.app
+```
+
+Alternatively, Control-click the application, choose **Open**, and confirm the
+prompt. Do not disable Gatekeeper system-wide.
+
+On Windows, Microsoft Defender SmartScreen may display a warning. Choose
+**More info**, verify that the application and release source are correct, then
+choose **Run anyway**.
 
 ## Build
 
-You will need a [JDK](https://jdk.java.net) and [Maven](http://maven.apache.org). Once you have them set up, you're ready to build Typometer.
+### Prerequisites
+
+All platforms require:
+
+* [JDK 16 or later](https://jdk.java.net), including `jpackage`.
+* [Maven](https://maven.apache.org).
+* [Pandoc](https://pandoc.org), used to generate the bundled HTML
+  documentation.
+
+Windows packaging additionally requires
+[WiX Toolset](https://wixtoolset.org), used by `jpackage` to create the MSI.
 
 Open your terminal of choice, and set your working directory to this project's root (where `pom.xml` is located). Then, build with Maven:
 
-```
+```bash
 mvn clean package
 ```
 
-If the compilation is successful, you will get a `target` directory, with the executable `typometer-<version>.jar` available inside.
+If the compilation is successful, the distributable
+`target/typometer-<version>-bin.zip` contains the executable JAR,
+documentation, and license.
 
+<!-- exclude:end -->
 ## Features
 
 * Cross-platform (Windows, Mac, Linux).
@@ -133,3 +180,45 @@ Here's a list of typical problems and corresponding solutions:
 Feel free to contribute by creating additional test case images (check `src/test/resources`).
 
 Pavel Fatin, [https://pavelfatin.com](https://pavelfatin.com)
+
+<!-- exclude:start -->
+## Building native packages locally
+
+To additionally create the native package for the host operating system, enable
+the `native` Maven profile:
+
+```bash
+mvn clean package -Pnative
+```
+
+* macOS: `target/macos/typometer-<version>-macos.dmg`
+* Windows: `target/windows/typometer-<version>-windows-<architecture>.msi`
+* Linux: `target/linux/typometer-<version>-linux-<architecture>.tar.gz`
+
+The macOS DMG contains the application, generated HTML documentation, license,
+and an Applications shortcut. Native packages include their own Java runtime.
+The package architecture matches the JDK and operating system used for the
+build. Windows MSI creation also requires the WiX Toolset.
+
+The generated packages are unsigned. See
+[Installing unsigned packages](#installing-unsigned-packages) for installation
+instructions.
+
+## Creating a release
+
+The GitHub Actions release workflow builds each native package on its target
+operating system. It can be run manually to inspect the generated workflow
+artifact without publishing a release.
+
+To publish a release, first update the version in `pom.xml`, then push a
+matching tag:
+
+```bash
+git tag v1.2.0
+git push origin v1.2.0
+```
+
+The tag must exactly match the Maven version prefixed with `v`. The workflow
+publishes the platform packages, portable ZIP, and `SHA256SUMS` to the GitHub
+Release.
+<!-- exclude:end -->

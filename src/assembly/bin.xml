@@ -11,11 +11,15 @@
             <outputDirectory>./</outputDirectory>
         </file>
         <file>
-            <source>src/doc/README.html</source>
+            <source>target/README.html</source>
             <outputDirectory>./</outputDirectory>
         </file>
         <file>
             <source>LICENSE</source>
+            <outputDirectory>./</outputDirectory>
+        </file>
+        <file>
+            <source>NOTICE</source>
             <outputDirectory>./</outputDirectory>
         </file>
     </files>

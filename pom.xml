@@ -11,6 +11,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.release>16</maven.compiler.release>
     </properties>
 
     <dependencies>
@@ -34,9 +35,28 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>8</source>
-                    <target>8</target>
+                    <release>${maven.compiler.release}</release>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.5.0</version>
+                <executions>
+                    <execution>
+                        <id>require-java-16</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireJavaVersion>
+                                    <version>[16,)</version>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -102,7 +122,102 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.5.0</version>
+                <executions>
+                    <execution>
+                        <id>generate-readme-html</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>pandoc</executable>
+                            <arguments>
+                                <argument>-s</argument>
+                                <argument>-t</argument>
+                                <argument>html5</argument>
+                                <argument>-o</argument>
+                                <argument>${project.build.directory}/README.html</argument>
+                                <argument>-H</argument>
+                                <argument>${project.basedir}/src/doc/style.css</argument>
+                                <argument>--lua-filter</argument>
+                                <argument>${project.basedir}/src/doc/exclude.lua</argument>
+                                <argument>${project.basedir}/README.md</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>native</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <executions>
+                            <execution>
+                                <id>build-native-package</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <exec executable="/bin/bash" osfamily="mac" failonerror="true">
+                                            <arg value="${project.basedir}/scripts/package-macos.sh"/>
+                                            <arg value="${project.build.directory}"/>
+                                            <arg value="${project.build.finalName}.jar"/>
+                                            <arg value="${project.version}"/>
+                                        </exec>
+                                        <exec executable="/bin/bash" osfamily="mac" failonerror="true">
+                                            <arg value="${project.basedir}/scripts/package-macos-dmg.sh"/>
+                                            <arg value="${project.build.directory}/macos/Typometer.app"/>
+                                            <arg value="${project.build.directory}/README.html"/>
+                                            <arg value="${project.basedir}/LICENSE"/>
+                                            <arg value="${project.build.directory}/macos/typometer-${project.version}-macos.dmg"/>
+                                        </exec>
+                                        <exec executable="/bin/bash" os="Linux" failonerror="true">
+                                            <arg value="${project.basedir}/scripts/package-linux.sh"/>
+                                            <arg value="${project.build.directory}/${project.build.finalName}.jar"/>
+                                            <arg value="${project.version}"/>
+                                            <arg value="${project.build.directory}/linux"/>
+                                            <arg value="${project.build.directory}/README.html"/>
+                                            <arg value="${project.basedir}/LICENSE"/>
+                                        </exec>
+                                        <exec executable="powershell" osfamily="windows" failonerror="true">
+                                            <arg value="-NoProfile"/>
+                                            <arg value="-ExecutionPolicy"/>
+                                            <arg value="Bypass"/>
+                                            <arg value="-File"/>
+                                            <arg value="${project.basedir}/scripts/package-windows.ps1"/>
+                                            <arg value="-JarPath"/>
+                                            <arg value="${project.build.directory}/${project.build.finalName}.jar"/>
+                                            <arg value="-AppVersion"/>
+                                            <arg value="${project.version}"/>
+                                            <arg value="-OutputDirectory"/>
+                                            <arg value="${project.build.directory}/windows"/>
+                                            <arg value="-ReadmePath"/>
+                                            <arg value="${project.build.directory}/README.html"/>
+                                            <arg value="-LicensePath"/>
+                                            <arg value="${project.basedir}/LICENSE"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
