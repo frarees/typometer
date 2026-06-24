@@ -19,6 +19,7 @@ package com.pavelfatin.typometer.screen;
 import com.sun.jna.Platform;
 
 import java.awt.*;
+import java.io.IOException;
 
 public interface ScreenAccessor {
     Color getPixelColor(int x, int y);
@@ -27,6 +28,40 @@ public interface ScreenAccessor {
 
     static boolean isNativeApiSupported() {
         return Platform.isWindows() || Platform.isLinux() || Platform.isMac();
+    }
+
+    static boolean isScreenCapturePermissionGranted() {
+        if (Platform.isMac()) {
+            return MacosScreenAccessor.hasScreenRecordingPermission();
+        }
+        return true;
+    }
+
+    static boolean requestScreenCapturePermission() {
+        if (Platform.isMac()) {
+            return MacosScreenAccessor.requestScreenRecordingPermission();
+        }
+        return true;
+    }
+
+    static void openScreenCaptureSettings() throws IOException {
+        if (Platform.isMac()) {
+            MacosScreenAccessor.openScreenRecordingSettings();
+        }
+    }
+
+    static boolean isInputPermissionGranted() {
+        if (Platform.isMac()) {
+            return MacosAccessibility.hasAccessibilityPermission();
+        }
+        return true;
+    }
+
+    static boolean requestInputPermission() {
+        if (Platform.isMac()) {
+            return MacosAccessibility.requestAccessibilityPermission();
+        }
+        return true;
     }
 
     static ScreenAccessor create(boolean isNative) {

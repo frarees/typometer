@@ -17,10 +17,38 @@
 package com.pavelfatin.typometer.screen;
 
 import java.awt.Color;
+import java.io.IOException;
 import com.sun.jna.*;
 
 class MacosScreenAccessor implements ScreenAccessor {
+    // Deep link to System Settings ▸ Privacy & Security ▸ Screen Recording.
+    private static final String SCREEN_RECORDING_SETTINGS_URL =
+            "x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture";
+
     MacosScreenAccessor() {
+    }
+
+    // Without Screen Recording permission CGWindowListCreateImage returns wallpaper/
+    // own-window pixels instead of failing, so it must be checked up front. The symbol
+    // is absent before macOS 10.15, where the permission does not exist.
+    static boolean hasScreenRecordingPermission() {
+        try {
+            return CG.CGPreflightScreenCaptureAccess();
+        } catch (UnsatisfiedLinkError e) {
+            return true;
+        }
+    }
+
+    static boolean requestScreenRecordingPermission() {
+        try {
+            return CG.CGRequestScreenCaptureAccess();
+        } catch (UnsatisfiedLinkError e) {
+            return true;
+        }
+    }
+
+    static void openScreenRecordingSettings() throws IOException {
+        Runtime.getRuntime().exec(new String[]{"open", SCREEN_RECORDING_SETTINGS_URL});
     }
 
     @Override
@@ -66,6 +94,10 @@ class MacosScreenAccessor implements ScreenAccessor {
         public static native CF.CFData CGDataProviderCopyData(CGDataProvider img);
         public static native CGImage CGWindowListCreateImage(CGRect.ByValue screenBounds, int windowOption, int windowId, int imageOption);
         public static native void CGImageRelease(CGImage img);
+
+        // Screen Recording permission (TCC), available since macOS 10.15.
+        public static native boolean CGPreflightScreenCaptureAccess();
+        public static native boolean CGRequestScreenCaptureAccess();
 
         public static final int kCGWindowListOptionAll = 0;
         public static final int kCGWindowListOptionOnScreenOnly = (1 << 0);

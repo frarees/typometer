@@ -398,6 +398,10 @@ public class MainFrame extends JFrame {
     }
 
     private void onBenchmark() {
+        if (!ensureBenchmarkPermissions()) {
+            return;
+        }
+
         ProgressDialog dialog = new ProgressDialog(this, "Benchmarking...");
 
         dialog.addWindowFocusListener(new WindowFocusListener() {
@@ -436,7 +440,68 @@ public class MainFrame extends JFrame {
         }
     }
 
+    private boolean ensureBenchmarkPermissions() {
+        // Accessibility re-prompts on every request, so just trigger it and stop.
+        if (!ScreenAccessor.isInputPermissionGranted()) {
+            setAlwaysOnTop(false);                 // don't bury the system prompt
+            ScreenAccessor.requestInputPermission();
+            return false;
+        }
+
+        // The Screen Recording prompt is one-shot; request it (registers the app in the
+        // settings list, prompts only on the first run), then point the user to Settings.
+        if (!ScreenAccessor.isScreenCapturePermissionGranted()) {
+            setAlwaysOnTop(false);
+            ScreenAccessor.requestScreenCapturePermission();
+            showScreenRecordingRequiredDialog();
+            return false;
+        }
+
+        return true;
+    }
+
+    private void showScreenRecordingRequiredDialog() {
+        JDialog dialog = new JDialog(this, "Screen Recording required", true);
+
+        String message = "<html><b>Screen Recording permission is required</b><br><br>"
+                + "Typometer reads pixel colors from the screen to measure latency,<br>"
+                + "which on macOS needs Screen Recording permission.<br><br>"
+                + "Enable <b>Typometer</b> under Screen Recording, then <b>restart the app</b>.</html>";
+
+        JPanel content = new JPanel(new BorderLayout(0, 12));
+        content.setBorder(BorderFactory.createEmptyBorder(16, 16, 12, 16));
+        content.add(new JLabel(message), BorderLayout.CENTER);
+
+        JButton open = new JButton("Open Screen Recording Settings");
+        open.addActionListener(e -> {
+            try {
+                ScreenAccessor.openScreenCaptureSettings();
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this,
+                        "Could not open System Settings:\n" + ex.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            dialog.dispose();
+        });
+
+        JButton close = new JButton("Close");
+        close.addActionListener(e -> dialog.dispose());
+
+        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
+        buttons.add(open);
+        buttons.add(close);
+        content.add(buttons, BorderLayout.SOUTH);
+
+        dialog.setContentPane(content);
+        dialog.getRootPane().setDefaultButton(close);
+        dialog.pack();
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+    }
+
     private void doBenchmark(ProgressDialog dialog) {
+        setAlwaysOnTop(true);                       // the permission flow may have dropped it
+
         final Parameters parameters = getParameters();
         final ScreenAccessor accessor = ScreenAccessor.create(myNative.isSelected());
         final boolean async = myAsync.isSelected();
