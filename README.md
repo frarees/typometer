@@ -99,7 +99,7 @@ At first, a predefined pattern (a series of "``.``" characters) is inserted in t
 
 After that, the program types a predefined number of "``.``" characters into the editor (with given periodicity), measuring delays between key presses and corresponding character drawings.
 
-To achieve high accuracy of measurement, only a single pixel is queried for each symbol. Moreover, the program can use fast native API ([WinAPI](https://en.wikipedia.org/wiki/Windows_API), [XLib](https://en.wikipedia.org/wiki/Xlib), and [Cocoa](https://en.wikipedia.org/wiki/Cocoa_%28API%29)) calls on supported platforms, offering [AWT robot](http://docs.oracle.com/javase/8/docs/api/java/awt/Robot.html) as a fallback option.
+To achieve high accuracy of measurement, only a single pixel is queried for each symbol. Moreover, the program can use fast native API ([WinAPI](https://en.wikipedia.org/wiki/Windows_API) and [XLib](https://en.wikipedia.org/wiki/Xlib)) calls on supported platforms, offering [AWT robot](http://docs.oracle.com/javase/8/docs/api/java/awt/Robot.html) as a fallback option. On macOS AWT robot is always used, as it already relies on the native Core Graphics API.
 
 There are two modes of testing available:
 

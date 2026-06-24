@@ -27,26 +27,28 @@ public interface ScreenAccessor {
     void dispose();
 
     static boolean isNativeApiSupported() {
-        return Platform.isWindows() || Platform.isLinux() || Platform.isMac();
+        // macOS has no native accessor: java.awt.Robot already uses CoreGraphics there,
+        // more correctly than a custom path could, so we fall back to it.
+        return Platform.isWindows() || Platform.isLinux();
     }
 
     static boolean isScreenCapturePermissionGranted() {
         if (Platform.isMac()) {
-            return MacosScreenAccessor.hasScreenRecordingPermission();
+            return MacosScreenRecording.hasScreenRecordingPermission();
         }
         return true;
     }
 
     static boolean requestScreenCapturePermission() {
         if (Platform.isMac()) {
-            return MacosScreenAccessor.requestScreenRecordingPermission();
+            return MacosScreenRecording.requestScreenRecordingPermission();
         }
         return true;
     }
 
     static void openScreenCaptureSettings() throws IOException {
         if (Platform.isMac()) {
-            MacosScreenAccessor.openScreenRecordingSettings();
+            MacosScreenRecording.openScreenRecordingSettings();
         }
     }
 
@@ -71,9 +73,6 @@ public interface ScreenAccessor {
             }
             if (Platform.isLinux()) {
                 return new LinuxScreenAccessor();
-            }
-            if (Platform.isMac()) {
-                return new MacosScreenAccessor();
             }
         }
         return new AwtRobotScreenAccessor();
