@@ -43,6 +43,10 @@ $architecture = switch ($env:PROCESSOR_ARCHITECTURE) {
     default { throw "Unsupported Windows architecture: $env:PROCESSOR_ARCHITECTURE" }
 }
 
+$javaVersionOutput = (& java -version 2>&1) -join "`n"
+$javaMajor = if ($javaVersionOutput -match '"(\d+)') { [int]$Matches[1] } else { 0 }
+$compressOption = if ($javaMajor -ge 21) { "--compress=zip-6" } else { "--compress=2" }
+
 $jar = Get-Item -LiteralPath $JarPath
 $readme = Get-Item -LiteralPath $ReadmePath
 $license = Get-Item -LiteralPath $LicensePath
@@ -65,8 +69,10 @@ try {
         --main-jar $jar.Name `
         --main-class com.pavelfatin.typometer.Application `
         --dest $OutputDirectory `
-        --vendor "Francisco Requena" `
-        --copyright "Copyright 2017 Pavel Fatin; modifications copyright 2026 Francisco Requena" `
+        --add-modules java.base,java.desktop,java.logging `
+        --jlink-options "--strip-debug --no-header-files --no-man-pages $compressOption" `
+        --vendor "Pavel Fatin" `
+        --copyright "Copyright 2017 Pavel Fatin" `
         --win-menu `
         --win-shortcut
 

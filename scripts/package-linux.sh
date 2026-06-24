@@ -56,6 +56,13 @@ rm -rf "$app_image_dir"
 mkdir -p "$input_dir" "$output_dir"
 cp "$jar_path" "$input_dir/$jar_name"
 
+java_major=$(java -version 2>&1 | awk -F'"' '/version/ {print $2}' | cut -d. -f1)
+if [[ "$java_major" -ge 21 ]]; then
+    compress_opt="--compress=zip-6"
+else
+    compress_opt="--compress=2"
+fi
+
 jpackage \
     --type app-image \
     --name Typometer \
@@ -64,8 +71,10 @@ jpackage \
     --main-jar "$jar_name" \
     --main-class com.pavelfatin.typometer.Application \
     --dest "$app_image_dir" \
-    --vendor "Francisco Requena" \
-    --copyright "Copyright 2017 Pavel Fatin; modifications copyright 2026 Francisco Requena"
+    --add-modules java.base,java.desktop,java.logging \
+    --jlink-options "--strip-debug --no-header-files --no-man-pages $compress_opt" \
+    --vendor "Pavel Fatin" \
+    --copyright "Copyright 2017 Pavel Fatin"
 
 cp "$readme_path" "$app_image_dir/README.html"
 cp "$license_path" "$app_image_dir/LICENSE"
