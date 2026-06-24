@@ -45,4 +45,5 @@ jpackage \
     --mac-package-identifier com.pavelfatin.typometer \
     --vendor "Pavel Fatin" \
     --copyright "Copyright 2017 Pavel Fatin" \
-    --java-options "-Dapple.awt.application.name=Typometer"
+    --java-options "-Dapple.awt.application.name=Typometer" \
+    --java-options "--enable-native-access=ALL-UNNAMED"

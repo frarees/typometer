@@ -71,6 +71,7 @@ try {
         --dest $OutputDirectory `
         --add-modules java.base,java.desktop,java.logging `
         --jlink-options "--strip-debug --no-header-files --no-man-pages $compressOption" `
+        --java-options "--enable-native-access=ALL-UNNAMED" `
         --vendor "Pavel Fatin" `
         --copyright "Copyright 2017 Pavel Fatin" `
         --win-menu `
